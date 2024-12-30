@@ -14,7 +14,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
     fs.createReadStream(filePath)
         .pipe(csvParser())
         .on('data', (row) => {
-            movies.push(row['Name']);
+            movies.push([row['Name'], row['Letterboxd URI']]);
+            console.log(movies);
         })
         .on('end', () => {
             fs.unlink(filePath, (err) => {
@@ -24,11 +25,11 @@ app.post('/upload', upload.single('file'), (req, res) => {
             })
 
             const random = movies[Math.floor(Math.random() * movies.length)]
-            res.json({movie: random});
-            console.log(random);
+            res.json({movie: random[0], link: random[1]});
+            console.log(random[0], random[1]);
         })
         .on('error', (err) => {
-            res.status(500).json({error: "Internal Server Error"});
+            res.status(500).json({error: err.message});
         });
 })
 

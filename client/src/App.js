@@ -2,6 +2,7 @@ import React, {useState} from "react";
 
 function App() {
   const [result, setResult] = useState('');
+  const [link, setLink] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,7 +32,8 @@ function App() {
 
       const data = await response.json();
       console.log(data.movie);
-      setResult(`you should watch ${data.movie}`);
+      setResult(`you should watch ${data.movie}!`);
+      setLink(`${data.link}`)
     } catch (error) {
       setResult("Error: ", error.message)
     }
@@ -45,6 +47,9 @@ function App() {
         <button type="submit">Upload</button>
       </form>
       <div id="result">{result}</div>
+      <div>Letterboxd Link: 
+      <a id="link" href={link}> {link}</a>
+      </div>
     </div>
   );
 }
